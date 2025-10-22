@@ -183,7 +183,7 @@ int function9() {
 
 int function10() {
 	vector<string> emoji = {"6️⃣7️⃣","⛵","🏴‍☠️","🦜","⚔️","🪢","🪙","🦪","⚫","🎩","🎤","🎶","😺"};
-	const char *alpha = “ABCDEFGHIJKLMNOPQRSTUVWXYZ”; //C Style String
+	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String
 	const char *consonants = "BCDFGHJKLMNPQRSTVWXYZ";
 	const char *vowels = "AEIOU";
 	int seed = read("Please enter a random seed:\n");
