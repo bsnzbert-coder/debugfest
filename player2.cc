@@ -7,9 +7,9 @@
 using namespace std;
 
 //When you complete a stage, set the next stage's 'false' to be 'true'
-#define STAGE6  false
-#define STAGE7  false
-#define STAGE8  false
+#define STAGE6  true
+#define STAGE7  true
+#define STAGE8  true
 #define STAGE9  false
 #define STAGE10 false
 
@@ -34,16 +34,16 @@ enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
 int function6() {
 	int seed = read("Input Random Seed:\n");
 	srand(seed);
-	int base-chance = read("Input Base Chance:\n");
+	int base_chance = read("Input Base Chance:\n"); //<------------------------------------ base_chance was base-change (incorrect variable name)
 	int increase_chance = read("Input Chance Goes Up Per Miss:\n");
-	if (base_chance < 1 and base_chance > 100 and increase_chance < 1 and increase_chance > 100) return BAD_INPUT;
-	int pulls = 0;
+	if (base_chance < 1 or base_chance > 100 or increase_chance < 1 or increase_chance > 100) return BAD_INPUT; //<------------ swapped all and statements for or statements
+	int pulls = 1; //<---------------- changed pulls from equaling 0 to equals 1
 	int chance = base_chance;
 	while (true) {
 		int roll = rand() % 100;
 		//cerr << roll << " vs " << chance << endl;
-		if (roll < chance) return pulls;
-		chance += -increase_chance; //We failed, so increase our odds next time
+		if (roll <= chance) return pulls; //<------------- was < without the equal sign 
+		chance += increase_chance; //We failed, so increase our odds next time <------ negative sign infront of increase_chance
 		pulls++; 
 	}
 	return 0;
@@ -72,16 +72,17 @@ int function6() {
 //Example 6: 1 1 1 1. Output: 0
 //Example 7: 0 1 1 1. Output: 0
 int function7() {
-	int do         = read("Did your show donate to glorious leader? (1 = yes, 0 = no):\n");
+	int donate     = read("Did your show donate to glorious leader? (1 = yes, 0 = no):\n"); //<---- swapped variable name do for donate (do is used for a function)
 	int promote    = read("Does your show promote our values (1 = yes, 0 = no):\n");
 	int eurovision = read("Is this show Eurovision? (1 = yes, 0 = no):\n");
 	int insult     = read("Has your show ever insulted glorious leader? (1 = yes, 0 = no):\n");
-	if (do < 0 or do > 1 or
+	if (donate < 0 or donate > 1 or             //<---- swapped do for donate 
 			promote < 0 or promote > 1 or
 			eurovision < 0 or eurovision > 1 or
 			insult < 0 or insult > 1)
-		return NOT_IMPLEMENTED;
-	return do + promote + eurovision - insult >= 2;
+		return BAD_INPUT; //<------ originally returned NOT_IMPLEMENTED swapped with BAD_INPUT
+	if (insult == 1) { return 0; } //<------- Added if statement since if ever insulted then show is not allowed to air.
+	return donate + promote + eurovision >= 2; //<----- swapped do for donate and erased subtraction of insult since its redundant info
 }
 #else
 int function7() {
@@ -108,14 +109,14 @@ int function7() {
 int function8() {
 	string s1 = read("Type in the first word:\n");
 	string s2 = read("Type in the second word:\n");
-	string vowels = AEIOU; //; is a Greek Semicolon
+	string vowels = "AEIOU"; //; is a Greek Semicolon <------------ parenthesized AEIOU
 	if (s1.size() < 3 or s1.size() > 12 or s2.size() < 3 or s2.size() > 12) return BAD_INPUT;
 	for (char &c:s1) c = toupper(c); //Uppercaseify s1
-	for (char &c:s2) c = tolower(c); //Uppercaseify s2
+	for (char &c:s2) c = toupper(c); //Uppercaseify s2 <-------- changed tolower to toupper 
 	try {
-		return s1.substr(s2.find_last_of(vowels)) == s2.substr(s1.find_last_of(vowels));
+		return s1.substr(s1.find_last_of(vowels)) == s2.substr(s2.find_last_of(vowels)); //<------ subtr was searching for through the opposite string (s1.find- was s2.find-) vice versa
 	} catch (...) {
-		return BAD_INPUT
+		return BAD_INPUT; //<------------ Was missing semicolon
 	}
 }
 #else
@@ -183,7 +184,7 @@ int function9() {
 
 int function10() {
 	vector<string> emoji = {"6️⃣7️⃣","⛵","🏴‍☠️","🦜","⚔️","🪢","🪙","🦪","⚫","🎩","🎤","🎶","😺"};
-	const char *alpha = “ABCDEFGHIJKLMNOPQRSTUVWXYZ”; //C Style String
+	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String
 	const char *consonants = "BCDFGHJKLMNPQRSTVWXYZ";
 	const char *vowels = "AEIOU";
 	int seed = read("Please enter a random seed:\n");
