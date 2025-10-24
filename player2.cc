@@ -10,8 +10,8 @@ using namespace std;
 #define STAGE6  true
 #define STAGE7  true
 #define STAGE8  true
-#define STAGE9  false
-#define STAGE10 false
+#define STAGE9  true
+#define STAGE10 true
 
 //If your stage detects bad input from the user, return BAD_INPUT
 enum RETVAL { NOT_IMPLEMENTED = -100, BAD_INPUT = -200};
@@ -138,10 +138,10 @@ int function9() {
 	//A lambda is a function that you can declare inside another function
 	//This one recursively computes the sum of all values 1 to N
 	//And returns an INT
-	auto lambda = [](int x, auto &&lambda) -> bool { 
+	auto lambda = [](int x, auto &lambda) /*-> bool*/ { //<---------- changed "auto &&lambda" to "auto &lambda" THEN commented -> bool because it was mean to me
 		if (x <= 1) return 1;
-		return x+lambda(x-1); //What am I missing here?
-	};
+		return x+lambda(x-1, lambda); //What am I missing here? <--------------- was originally x+lambda(x-1) / changed "(x-1)" to "(x-1, lambda)
+	};       //<------------------------------------------------------ not a random semicolon at the end of line
 	return lambda(N,lambda);
 }
 #else
@@ -184,7 +184,7 @@ int function9() {
 
 int function10() {
 	vector<string> emoji = {"6️⃣7️⃣","⛵","🏴‍☠️","🦜","⚔️","🪢","🪙","🦪","⚫","🎩","🎤","🎶","😺"};
-	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String
+	const char *alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //C Style String <------------- There was a smart quote here if I remember correctly
 	const char *consonants = "BCDFGHJKLMNPQRSTVWXYZ";
 	const char *vowels = "AEIOU";
 	int seed = read("Please enter a random seed:\n");
@@ -193,7 +193,7 @@ int function10() {
 	while (true) {
 		string flag = emoji.at(rand()%emoji.size());
 		auto random_letter = [&](const char *str) {
-			return *((str+rand()%strlen(str))+1);
+			return *((str+rand()%strlen(str))); //<-------- removed a random +1 inside the parenthesis
 		};
 		//Random Name Generator
 		string name;
