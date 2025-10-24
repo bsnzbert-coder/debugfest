@@ -62,8 +62,8 @@ int function1() {
 int function2() {
 	int seed = read("What seed should we use for the random number generator?\n");
 	int sum{};
+	srand(seed);
 	for (int i = 0; i < 20; i++) {
-		srand(seed);
 		sum += rand() % 6 + 1;
 	}
 	return sum;
