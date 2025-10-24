@@ -5,13 +5,14 @@
 #include <numeric> // IWYU pragma: keep
 #include "player2.cc" //Your partner will work in this file
 #include <cmath>
+#include <string>
 using namespace std;
 
 //When you complete a stage, set the next stage's 'false' to be 'true'
-#define STAGE1 false
+#define STAGE1 true
 #define STAGE2 false
-#define STAGE3 false
-#define STAGE4 false
+#define STAGE3 true
+#define STAGE4 true
 #define STAGE5 false
 
 //If your stage isn't implemented, it should return NOT_IMPLEMENTED
@@ -32,15 +33,16 @@ int function1() {
 	int sum = 0;
 	while (true) {
 		int start = read("What is the starting value on the odometer (0 to quit)?\n");
-		if (start == 0) { break; }
-		if (start <= 0) return BAD_INPUT;
+		if (start == 0) { break;} //Added break statement when start equals 0
+		if (start < 0) return BAD_INPUT; //Removed equal sign
 		if (!start) return sum;
 		int end = read("What is the ending value on the odometer (0 to quit)?\n");
-		if (end <= 0) return BAD_INPUT;
+		if (end == 0) {break;} //Added break statement when end equals 0
+		if (end < 0) return BAD_INPUT; //Removed equal sign
 		if (!end) return sum;
 		int distance = end - start;
 		if (distance < 0) return BAD_INPUT;
-		sum -= distance;
+		sum += distance; //Replaced subtraction sign for addition
 	}
 	return sum;
 }
@@ -80,15 +82,16 @@ int function2() {
 int function3() {
 	cout << "Stevie Nicks was the lead singer for Fleetwood Mac and also had a solo career.\n";
 	cout << "Please enter the name of a song and we will return 1 if it is one of her songs, 0 otherwise.\n";
-	string song;
-	cin >> song;
-	if (song == "The Chain") {
+	string song; //<--------Had to #include the string library
+	//cin >> song; <-------- Original line of code that only took in one word
+	song = readline(song); //<-------- New Line of code that takes the whole line of input 
+	//cout << song << endl; //Test
+	
+	   if (song == "The Chain") {
 		return 1;
 	} else if (song == "Edge of Seventeen") {
 		return 1;
-	} else
-		return 0;
-	else if (song == "Stop Draggin' My Heart Around") {
+	} else if (song == "Stop Draggin' My Heart Around") {
 		return 1;
 	} else if (song == "Stand Back") {
 		return 1;
@@ -96,8 +99,12 @@ int function3() {
 		return 1;
 	} else if (song == "Go Your Own Way") {
 		return 1;
+	} else {			//<-------- else return 0; statement was originally in at line 90-91 and had moved to bottom of the if statement 
+		return 0;		//<-------- Also was missing a curly bracket in the original line
 	}
+	
 	return 0;
+	
 }
 #else
 int function3() {
@@ -124,7 +131,7 @@ int function4() {
 	string str = readline("Enter the string for a game, such as: FFTTETCFS:\n");
 	int score{};
 	if (str.size() == 0) return score;
-	char last_char = "F";
+	char last_char = 'F'; //<------ double quotations were originally around the char which should have been single quotes
 	for (const char &c : str) {
 		switch (c) {
 		case FIELD_GOAL:
@@ -134,15 +141,16 @@ int function4() {
 			score += TOUCHDOWN_POINTS;
 			break;
 		case EXTRA_POINT:
-			if (last_char == TOUCHDOWN) return BAD_INPUT;
+			if (last_char != TOUCHDOWN) return BAD_INPUT; //<---------- condition was == which was meant to be != to check if last_char was not equal to TOUCHDOWN
 			score += EXTRA_POINT_POINT;
 			break;
 		case CONVERSION:
-			if (last_char == TOUCHDOWN) return BAD_INPUT;
+			if (last_char != TOUCHDOWN) return BAD_INPUT; //<---------- condition was == which was meant to be != to check if last_char was not equal to TOUCHDOWN
 			score += CONVERSION_POINTS;
 			break;
 		case SAFETY:
 			score += SAFETY_POINTS;
+			break; //<--------- Added missing break which without it was sending it to default returning BAD_INPUT
 		default:
 			return BAD_INPUT;
 		}
