@@ -9,11 +9,11 @@
 using namespace std;
 
 //When you complete a stage, set the next stage's 'false' to be 'true'
-#define STAGE1 true
+#define STAGE1 false
 #define STAGE2 false
-#define STAGE3 true
-#define STAGE4 true
-#define STAGE5 false
+#define STAGE3 false
+#define STAGE4 false
+#define STAGE5 true
 
 //If your stage isn't implemented, it should return NOT_IMPLEMENTED
 //If your stage detects bad input from the user, return BAD_INPUT
@@ -62,8 +62,9 @@ int function1() {
 int function2() {
 	int seed = read("What seed should we use for the random number generator?\n");
 	int sum{};
+	srand(seed);
 	for (int i = 0; i < 20; i++) {
-		srand(seed);
+		//srand(seed);
 		sum += rand() % 6 + 1;
 	}
 	return sum;
@@ -211,23 +212,25 @@ int function5() {
 		// the highest and save that into the memo. Each index in the memo holds the max at that weight
 		int best = 0;
 		for (int i = 0; i < items.size(); i++)
-			i//{
+		{ // <------------------- random i in the line of code and curly bracket was originally commented out
 			Item item = items.at(i);
 		int difference = weight - item.weight;
 		if (difference < 0) //Can't hold this item in the cart
-			continue;
+			break; //<------- swapped out continue for break
 		int cur = memo.at(difference) + item.price; //Value of cart + our item price at cart limit
-		if (cur < best) best = cur; //This is our best so far
-		//}
+		if (cur > best) best = cur; //This is our best so far //<---------------------- swapped the less than sign for a greater than sign
+			}
 		memo.push_back(best);
-	}
+		} //<---------------------- Curly bracket was originally commented out 
 	// <--------------------------------------------
 	/* Debug Information
 	for (int i = 0; i < memo.size(); i++) {
 		cerr << "Weight " << i << " Value: " << memo.at(i) << endl;
 	}
 	*/
+
 	return memo.back();
+	
 }
 #else
 int function5() {
